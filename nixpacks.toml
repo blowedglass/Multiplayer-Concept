@@ -1,0 +1,8 @@
+[phases.build]
+cmds = ["dotnet restore", "dotnet publish -c Release -o out"]
+
+[phases.start]
+cmd = "dotnet out/NatPunchServer.dll"
+
+[variables]
+NIXPACKS_PROVIDER = "dotnet"
