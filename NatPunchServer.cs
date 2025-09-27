@@ -7,8 +7,8 @@ class NatPunchServer : INetEventListener, INatPunchListener
 {
     private NetManager _server;
     private readonly int _port;
-    
-    private Dictionary<string, List<System.Net.IPEndPoint>> _roomEndpoints = 
+
+    private Dictionary<string, List<System.Net.IPEndPoint>> _roomEndpoints =
         new Dictionary<string, List<System.Net.IPEndPoint>>();
 
     public NatPunchServer()
@@ -25,11 +25,11 @@ class NatPunchServer : INetEventListener, INatPunchListener
             _server = new NetManager(this);
             _server.NatPunchEnabled = true;
             _server.NatPunchModule.NatPunchListener = this;
-            
+
             _server.Start(_port);
             Console.WriteLine($"NAT Punch server started on port {_port}");
             Console.WriteLine("Railway deployment successful!");
-            
+
             while (true)
             {
                 _server.PollEvents();
@@ -44,16 +44,16 @@ class NatPunchServer : INetEventListener, INatPunchListener
     }
 
     // --- INetEventListener ---
-    public void OnPeerConnected(NetPeer peer) 
+    public void OnPeerConnected(NetPeer peer)
     {
-        Console.WriteLine($"Peer connected: {peer.Address}");
+        Console.WriteLine($"Peer connected: {peer.EndPoint}");
     }
-    
-    public void OnPeerDisconnected(NetPeer peer, DisconnectInfo info) 
+
+    public void OnPeerDisconnected(NetPeer peer, DisconnectInfo info)
     {
-        Console.WriteLine($"Peer disconnected: {peer.Address}, Reason: {info.Reason}");
+        Console.WriteLine($"Peer disconnected: {peer.EndPoint}, Reason: {info.Reason}");
     }
-    
+
     public void OnNetworkError(System.Net.IPEndPoint ep, System.Net.Sockets.SocketError error)
     {
         Console.WriteLine($"Network error from {ep}: {error}");
@@ -72,8 +72,8 @@ class NatPunchServer : INetEventListener, INatPunchListener
     }
 
     public void OnNetworkLatencyUpdate(NetPeer peer, int latency) { }
-    
-    public void OnConnectionRequest(ConnectionRequest request) 
+
+    public void OnConnectionRequest(ConnectionRequest request)
     {
         Console.WriteLine($"Connection request from {request.RemoteEndPoint} - Rejecting (punch server)");
         request.Reject();
@@ -86,12 +86,12 @@ class NatPunchServer : INetEventListener, INatPunchListener
         Console.WriteLine($"  Local: {localEndPoint}");
         Console.WriteLine($"  Remote: {remoteEndPoint}");
         Console.WriteLine($"  Token: {token}");
-        
+
         if (!_roomEndpoints.ContainsKey(token))
         {
             _roomEndpoints[token] = new List<System.Net.IPEndPoint>();
         }
-        
+
         if (!_roomEndpoints[token].Contains(remoteEndPoint))
         {
             _roomEndpoints[token].Add(remoteEndPoint);
