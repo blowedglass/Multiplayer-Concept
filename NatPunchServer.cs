@@ -24,7 +24,7 @@ class NatPunchServer : INetEventListener, INatPunchListener
         {
             _server = new NetManager(this);
             _server.NatPunchEnabled = true;
-            _server.NatPunchModule.NatPunchListener = this;
+            // NatPunchListener is automatically set when implementing INatPunchListener
 
             _server.Start(_port);
             Console.WriteLine($"NAT Punch server started on port {_port}");
@@ -61,7 +61,7 @@ class NatPunchServer : INetEventListener, INatPunchListener
 
     public void OnNetworkReceive(NetPeer peer, NetPacketReader reader, byte channelNumber, DeliveryMethod deliveryMethod)
     {
-        Console.WriteLine($"Unexpected game data received from {peer.Address}");
+        Console.WriteLine($"Unexpected game data received from {peer.EndPoint}");
         reader.Recycle();
     }
 
@@ -96,6 +96,12 @@ class NatPunchServer : INetEventListener, INatPunchListener
         {
             _roomEndpoints[token].Add(remoteEndPoint);
             Console.WriteLine($"  Added to room '{token}' (Total in room: {_roomEndpoints[token].Count})");
+        }
+
+        Console.WriteLine($"  Current endpoints in room '{token}':");
+        foreach (var ep in _roomEndpoints[token])
+        {
+            Console.WriteLine($"    - {ep}");
         }
     }
 
