@@ -108,7 +108,7 @@ class NatPunchServer : INetEventListener, INatPunchListener
         Console.WriteLine($"=== NAT Introduction Request ===");
         Console.WriteLine($"  Local: {localEndPoint}");
         Console.WriteLine($"  Remote: {remoteEndPoint}");
-        Console.WriteLine($"  Token: {token}");
+        Console.WriteLine($"  Token: '{token}' (Length: {token?.Length ?? 0})");
 
         if (string.IsNullOrEmpty(token))
         {
