@@ -168,9 +168,11 @@ class NatPunchServer : INetEventListener, INatPunchListener
                     // Introduce client to host
                     Console.WriteLine($"    Introducing CLIENT {client.EndPoint} to HOST {host.EndPoint}");
                     _server.NatPunchModule.NatIntroduce(
-                        host.EndPoint,    // host endpoint
-                        client.EndPoint,  // client endpoint  
-                        token             // room token
+                        host.EndPoint,      // host internal
+                        host.EndPoint,      // host external  
+                        client.EndPoint,    // client internal
+                        client.EndPoint,    // client external
+                        token               // room token
                     );
                 }
             }
